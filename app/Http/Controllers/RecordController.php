@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Record;
+use Illuminate\Support\Facades\DB;
 
 class RecordController extends Controller
 {
@@ -67,6 +68,41 @@ class RecordController extends Controller
 
     public function statics()
     {
-        return view('record.statics');
+        $top_records = Record::where('user_id', auth()->id())->get()->sortBy('amount')->take(5);
+
+        $top_categories = DB::table('records')
+            ->join('categories', 'records.category_id', '=', 'categories.id')
+            ->select('categories.name as category_name', DB::raw('SUM(records.amount) as total_amount'))
+            ->where('records.user_id', auth()->id())
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('total_amount')
+            ->take(5)
+            ->get();
+
+        $most_active_categories = DB::table('records')
+            ->join('categories', 'records.category_id', '=', 'categories.id')
+            ->select('categories.name as category_name', DB::raw('COUNT(records.id) as record_count'))
+            ->where('records.user_id', auth()->id())
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('record_count')
+            ->take(5)
+            ->get();
+
+        $top_records_this_month = Record::where('user_id', auth()->id())
+            ->whereMonth('created_at', now()->month)
+            ->orderByDesc('amount')
+            ->take(5)
+            ->get();
+
+
+            $highest_spending_days = DB::table('records')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total_amount'))
+            ->where('user_id', auth()->id())
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderByDesc('total_amount')
+            ->take(5)
+            ->get();
+
+        return view('record.statics', compact('top_records', 'top_categories', 'most_active_categories', 'top_records_this_month', 'highest_spending_days'));
     }
 }
