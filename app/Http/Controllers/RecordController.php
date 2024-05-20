@@ -13,8 +13,8 @@ class RecordController extends Controller
     {
         $total_amount = Record::where('user_id', auth()->id())->sum('amount');
 
-        $total_amount_this_month = Record::where('user_id', auth()->id())->whereYear('date', Carbon::now()->year)
-            ->whereMonth('date', Carbon::now()->month)
+        $total_amount_this_month = Record::where('user_id', auth()->id())->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
             ->sum('amount');
 
         if (isset($request->filter)) {
