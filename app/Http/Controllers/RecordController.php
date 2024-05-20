@@ -68,7 +68,7 @@ class RecordController extends Controller
 
     public function statics()
     {
-        $top_records = Record::where('user_id', auth()->id())->get()->sortBy('amount')->take(5);
+        $top_records = Record::where('user_id', auth()->id())->get()->sortByDesc('amount')->take(5);
 
         $top_categories = DB::table('records')
             ->join('categories', 'records.category_id', '=', 'categories.id')
@@ -95,10 +95,10 @@ class RecordController extends Controller
             ->get();
 
 
-            $highest_spending_days = DB::table('records')
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total_amount'))
+        $highest_spending_days = DB::table('records')
+            ->select(DB::raw('DATE(date) as date'), DB::raw('SUM(amount) as total_amount'))
             ->where('user_id', auth()->id())
-            ->groupBy(DB::raw('DATE(created_at)'))
+            ->groupBy(DB::raw('DATE(date)'))
             ->orderByDesc('total_amount')
             ->take(5)
             ->get();

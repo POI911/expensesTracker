@@ -44,6 +44,8 @@
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
     <script src="{{ asset('assets/js/custom/modals/create-app.js') }}"></script> --}}
 
+    <script src="https://cdn.datatables.net/plug-ins/1.11.3/sorting/datetime-moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
 </body>

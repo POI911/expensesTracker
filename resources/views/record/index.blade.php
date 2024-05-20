@@ -301,11 +301,14 @@
         });
 
         $(document).ready(function() {
-
+            $.fn.dataTable.moment('DD-MM-YYYY');
             var table = $('#kt_customers_table').DataTable({
                 searching: true,
                 pageLength: 30,
-                search: false
+                columnDefs: [{
+                    type: 'datetime-moment',
+                    targets: [5]
+                }]
             });
 
             $('#exampleFormControlInput1').on('keyup', function() {
