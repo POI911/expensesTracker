@@ -5,18 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Record;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RecordController extends Controller
 {
     public function index(Request $request)
     {
+        $total_amount = Record::all()->sum('amount');
+
+        $total_amount_this_month = Record::whereYear('date', Carbon::now()->year)
+            ->whereMonth('date', Carbon::now()->month)
+            ->sum('amount');
+
         if (isset($request->filter)) {
             $records = Record::where('user_id', auth()->id())->where('category_id', $request->filter)->get();
         } else {
 
             $records = Record::where('user_id', auth()->id())->get();
         }
-        return view('record.index', compact('records'));
+        return view('record.index', compact('records', 'total_amount', 'total_amount_this_month'));
     }
     public function show(Record $record)
     {
@@ -68,6 +75,13 @@ class RecordController extends Controller
 
     public function statics()
     {
+
+        $total_amount = Record::all()->sum('amount');
+
+        $total_amount_this_month = Record::whereYear('date', Carbon::now()->year)
+            ->whereMonth('date', Carbon::now()->month)
+            ->sum('amount');
+
         $top_records = Record::where('user_id', auth()->id())->get()->sortByDesc('amount')->take(5);
 
         $top_categories = DB::table('records')
@@ -103,6 +117,18 @@ class RecordController extends Controller
             ->take(5)
             ->get();
 
-        return view('record.statics', compact('top_records', 'top_categories', 'most_active_categories', 'top_records_this_month', 'highest_spending_days'));
+        return view('record.statics', compact('top_records', 'top_categories', 'most_active_categories', 'top_records_this_month', 'highest_spending_days', 'total_amount', 'total_amount_this_month'));
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $recordIds = $request->input('record_ids');
+
+        if (!empty($recordIds)) {
+            Record::whereIn('id', $recordIds)->delete();
+            return redirect()->back()->with('success', 'Selected records have been deleted.');
+        }
+
+        return redirect()->back()->with('error', 'No records selected for deletion.');
     }
 }

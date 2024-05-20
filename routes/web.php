@@ -44,3 +44,5 @@ Route::controller(RecordController::class)->group(function () {
     Route::post('/records/update/{record_id}', 'update')->name('records.update')->middleware('auth');
     Route::get('/records/delete/record/{record_id}', 'delete')->name('records.delete')->middleware('auth');
 });
+
+Route::delete('/records/bulk-delete', [RecordController::class, 'bulkDelete'])->name('records.bulkDelete');
