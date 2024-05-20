@@ -11,9 +11,9 @@ class RecordController extends Controller
 {
     public function index(Request $request)
     {
-        $total_amount = Record::all()->sum('amount');
+        $total_amount = Record::where('user_id', auth()->id())->sum('amount');
 
-        $total_amount_this_month = Record::whereYear('date', Carbon::now()->year)
+        $total_amount_this_month = Record::where('user_id', auth()->id())->whereYear('date', Carbon::now()->year)
             ->whereMonth('date', Carbon::now()->month)
             ->sum('amount');
 
@@ -76,9 +76,9 @@ class RecordController extends Controller
     public function statics()
     {
 
-        $total_amount = Record::all()->sum('amount');
+        $total_amount = Record::where('user_id', auth()->id())->sum('amount');
 
-        $total_amount_this_month = Record::whereYear('date', Carbon::now()->year)
+        $total_amount_this_month = Record::where('user_id', auth()->id())->whereYear('date', Carbon::now()->year)
             ->whereMonth('date', Carbon::now()->month)
             ->sum('amount');
 

@@ -111,6 +111,8 @@
                                                                 data-kt-menu-dismiss="true"
                                                                 data-kt-customer-table-filter="filter">Apply</button>
                                                         </div>
+
+
                                                         <!--end::Actions-->
                                                     </form>
 
@@ -124,6 +126,11 @@
                                             <!--begin::Add customer-->
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_add_customer">New Record</button>
+
+                                            <button type="submit" class="btn btn-danger ms-2"
+                                                id="delete-selected-button">Delete
+                                                Selected</button>
+
                                             <!--end::Add customer-->
                                         </div>
                                         <!--end::Toolbar-->
@@ -241,7 +248,6 @@
                                             </tbody>
                                             <!--end::Table body-->
                                         </table>
-                                        <button type="submit" class="btn btn-danger mt-3">Delete Selected</button>
                                     </form>
 
                                     <script>
@@ -321,6 +327,10 @@
             $('#exampleFormControlInput1').on('keyup', function() {
                 table.search(this.value).draw();
             });
+        });
+
+        document.getElementById('delete-selected-button').addEventListener('click', function() {
+            document.getElementById('bulk-delete-form').submit();
         });
     </script>
 

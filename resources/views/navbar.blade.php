@@ -5,9 +5,11 @@
             <h4 class="navbar-brand  my-1 mx-1 ">Welcome, {{ auth()->user()->name }} !</h4>
             <div class="d-flex">
 
-                <h4 class="navbar-brand  my-1 mx-1 ">Total :{{ number_format($total_amount) }}</h4>
+                <h4 class="navbar-brand  my-1 mx-1 ">Total
+                    :<span class="text-danger px-1">{{ number_format($total_amount) }}</span></h4>
                 <div class="text-white" style="line-height: 35px">║</div>
-                <h4 class="navbar-brand  my-1 mx-1 ">Total This month :{{ number_format($total_amount_this_month) }}</h4>
+                <h4 class="navbar-brand  my-1 mx-1 ">Total This month
+                    :<span class="text-danger px-1">{{ number_format($total_amount_this_month) }} </span></h4>
             </div>
 
         </div>
